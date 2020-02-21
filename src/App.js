@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-const ctxColor = React.createContext();
+const ctxLang = React.createContext();
 
 /*
 Dengan React Context:
@@ -13,18 +13,18 @@ const App = () => {
 	const [lang, setLang] = useState('Indonesia');
 
 	return (
-		<ctxColor.Provider value={lang}>
+		<ctxLang.Provider value={lang}>
 			<div style={{ margin: '20px auto', width: '500px', textAlign: 'center' }}>
 				<Welcome />
 				<Form />
 			</div>
-		</ctxColor.Provider>
+		</ctxLang.Provider>
 	);
 };
 
 const Welcome = () => {
 	return (
-		<ctxColor.Consumer>
+		<ctxLang.Consumer>
 			{context => (
 				<div>
 					<h3>Selamat datang!</h3>
@@ -34,7 +34,7 @@ const Welcome = () => {
 					</p>
 				</div>
 			)}
-		</ctxColor.Consumer>
+		</ctxLang.Consumer>
 	);
 };
 
@@ -48,7 +48,7 @@ const Form = () => {
 
 const Confirm = () => {
 	return (
-		<ctxColor.Consumer>
+		<ctxLang.Consumer>
 			{context => (
 				<div>
 					<button>
@@ -57,7 +57,7 @@ const Confirm = () => {
 					</button>
 				</div>
 			)}
-		</ctxColor.Consumer>
+		</ctxLang.Consumer>
 	);
 };
 
