@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './App.css';
 
-const ctxColor = React.createContext();
+const ctxLang = React.createContext();
 
 /*
 Dengan React Context:
@@ -13,18 +13,18 @@ const App = () => {
 	const [lang, setLang] = useState('Indonesia');
 
 	return (
-		<ctxColor.Provider value={lang}>
+		<ctxLang.Provider value={lang}>
 			<div style={{ margin: '20px auto', width: '500px', textAlign: 'center' }}>
 				<Welcome />
 				<Form />
 			</div>
-		</ctxColor.Provider>
+		</ctxLang.Provider>
 	);
 };
 
 const Welcome = () => {
 	return (
-		<ctxColor.Consumer>
+		<ctxLang.Consumer>
 			{context => (
 				<div>
 					<h3>Selamat datang!</h3>
@@ -34,30 +34,34 @@ const Welcome = () => {
 					</p>
 				</div>
 			)}
-		</ctxColor.Consumer>
+		</ctxLang.Consumer>
 	);
 };
 
 const Form = () => {
 	return (
 		<div>
-			<Confirm />
+			<Questionare />
 		</div>
 	);
 };
 
-const Confirm = () => {
+const Questionare = () => {
+	const lang = useContext(ctxLang);
+
 	return (
-		<ctxColor.Consumer>
-			{context => (
-				<div>
-					<button>
-						{context == 'Indonesia' && 'Siapa nama kamu?'}
-						{context == 'English' && 'Who are you?'}
-					</button>
-				</div>
-			)}
-		</ctxColor.Consumer>
+		<div>
+			<ol>
+				<li>
+					{lang == 'Indonesia' && 'Siapa nama kamu?'}
+					{lang == 'English' && 'Who are you?'}
+				</li>
+				<li>
+					{lang == 'Indonesia' && 'Dari mana kamu berasal?'}
+					{lang == 'English' && 'Where do you come from??'}
+				</li>
+			</ol>
+		</div>
 	);
 };
 
