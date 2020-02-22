@@ -1,31 +1,57 @@
 import React, { useState, useEffect } from 'react';
 
-const withLocalStorage = WrappedComponent => {
-	const WithLocalStorage = props => {
-		const get = key => localStorage.getItem(key);
-		const save = (key, data) => localStorage.setItem(key, data);
-		const remove = key => localStorage.removeItem(key);
+// Context
+const AuthContext = React.createContext();
 
-		return (
-			<WrappedComponent get={get} save={save} remove={remove} {...props} />
-		);
-	};
-
-	return WithLocalStorage;
+// HOC
+const withAuth = WrappedComponent => {
+	const WithAuth = props => (
+		<AuthContext.Consumer>
+			{context => <WrappedComponent {...props} {...context} />}
+		</AuthContext.Consumer>
+	);
+	return WithAuth;
 };
 
 const App = props => {
-	const [name, setName] = useState(props.get('name'));
+	const [user, setuser] = useState({ name: 'alfanzain' });
 
-	useEffect(() => {
-		if (!name) {
-			console.log(name);
-			props.save('name', 'guest');
-			setName('guest');
-		}
-	}, [name]);
-
-	return <>You are logged on as {name}</>;
+	return (
+		<AuthContext.Provider value={user}>
+			<h1>Welcome to my App!</h1>
+			<StatusLogin />
+			<Greeting />
+			<Question />
+			<Hope />
+		</AuthContext.Provider>
+	);
 };
 
-export default withLocalStorage(App);
+// Context.Consumer
+const StatusLogin = props => (
+	<AuthContext.Consumer>
+		{context => <div>You are logged in as {context.name}</div>}
+	</AuthContext.Consumer>
+);
+
+// Context.Consumer
+const Greeting = props => (
+	<AuthContext.Consumer>
+		{context => <div>Hello {context.name}</div>}
+	</AuthContext.Consumer>
+);
+
+// Context.Consumer
+const Question = props => (
+	<AuthContext.Consumer>
+		{context => <div>Are you happy today, {context.name}?</div>}
+	</AuthContext.Consumer>
+);
+
+// HOC + Context
+// tanpa Context.Consumer bisa akses context
+const Hope = withAuth(props => {
+	return <h6>I hope you are happy, {props.name}!</h6>;
+});
+
+export default App;
