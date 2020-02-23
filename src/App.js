@@ -1,57 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-// Context
-const AuthContext = React.createContext();
+const Amount = props => {
+	const [amount, setAmount] = useState(0);
 
-// HOC
-const withAuth = WrappedComponent => {
-	const WithAuth = props => (
-		<AuthContext.Consumer>
-			{context => <WrappedComponent {...props} {...context} />}
-		</AuthContext.Consumer>
-	);
-	return WithAuth;
-};
+	const increase = () => {
+		setAmount(amount + 1);
+	};
 
-const App = props => {
-	const [user, setuser] = useState({ name: 'alfanzain' });
+	const decrease = () => {
+		setAmount(amount - 1);
+	};
 
 	return (
-		<AuthContext.Provider value={user}>
-			<h1>Welcome to my App!</h1>
-			<StatusLogin />
-			<Greeting />
-			<Question />
-			<Hope />
-		</AuthContext.Provider>
+		<div>
+			<h4>Dollar: {amount}</h4>
+			<button type="button" onClick={increase}>
+				+
+			</button>
+			<button type="button" onClick={decrease}>
+				-
+			</button>
+
+			{props.render(amount)}
+		</div>
 	);
 };
 
-// Context.Consumer
-const StatusLogin = props => (
-	<AuthContext.Consumer>
-		{context => <div>You are logged in as {context.name}</div>}
-	</AuthContext.Consumer>
-);
+const Rupiah = props => <h6>Rupiah = {props.amount * 13000}</h6>;
 
-// Context.Consumer
-const Greeting = props => (
-	<AuthContext.Consumer>
-		{context => <div>Hello {context.name}</div>}
-	</AuthContext.Consumer>
-);
-
-// Context.Consumer
-const Question = props => (
-	<AuthContext.Consumer>
-		{context => <div>Are you happy today, {context.name}?</div>}
-	</AuthContext.Consumer>
-);
-
-// HOC + Context
-// tanpa Context.Consumer bisa akses context
-const Hope = withAuth(props => {
-	return <h6>I hope you are happy, {props.name}!</h6>;
-});
+const App = () => {
+	return (
+		<Amount
+			render={amount => (
+				<div>
+					<Rupiah amount={amount} />
+				</div>
+			)}
+		/>
+	);
+};
 
 export default App;
